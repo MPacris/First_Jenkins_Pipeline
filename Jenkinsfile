@@ -6,7 +6,14 @@ pipeline {
 
         stage('Test') {
             steps {
+                script{
+                    def nodejsTool = tool name: 'node-<version number>-tool', type: 'jenkins.plugins.nodejs.tools.NodeJSInstallation'
+                    env.PATH = "${nodejsTool}/bin:${env.PATH}"
+
+                }
+                sh 'node --version'
                 sh 'echo "Running tests..."'
+
             }
         }
 
@@ -21,6 +28,11 @@ pipeline {
         stage('Docker'){
 
             steps{
+                script{
+                    def dockerTool = tool name: 'docker-latest-tool', type: 'org.jenkinsci.plugins.docker.tools.DockerTool'
+                    env.PATH = "${dockerTool}/bin:${env.PATH}"
+                }
+                sh 'docker --version'
                 sh 'echo "Building image and pushing image to Docker Hub"'
  
             }
